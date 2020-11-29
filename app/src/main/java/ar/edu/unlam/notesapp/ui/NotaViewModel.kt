@@ -23,25 +23,25 @@ class NotaViewModel(application: Application): AndroidViewModel(application) {
 
     fun addNota(nota: Nota){
         viewModelScope.launch(Dispatchers.IO){
-                repository.addNota(nota)
+                repository.addNote(nota)
         }
     }
 
     fun updateNota(nota: Nota){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateNota(nota)
+            repository.updateNote(nota)
         }
     }
 
     fun deleteNota(nota: Nota){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteNota(nota)
+            repository.deleteNote(nota)
         }
     }
 
     fun deleteAllNotas(){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAllNotas()
+            repository.deleteAllNotes()
         }
     }
 
