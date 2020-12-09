@@ -3,6 +3,7 @@ package ar.edu.unlam.notesapp.ui.fragments.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.drawToBitmap
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.unlam.notesapp.R

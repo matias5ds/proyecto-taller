@@ -20,7 +20,7 @@ import kotlinx.android.parcel.Parcelize
     @ColumnInfo(name = "contenido")
     val contenido: String,
 
-   // @ColumnInfo(name = "imagen")
-    //val imagen: String
+    //@ColumnInfo(name = "imagen")
+   // val imagen: String
 
 ):Parcelable

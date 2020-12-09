@@ -32,4 +32,7 @@ class NotaRepository(private val notaDao: NotaDao):NoteRepository{
          notaDao.deleteAllNotas()
     }
 
+    override suspend fun getAllNotes(): List<Nota> {
+        return notaDao.getAllNotas().map{Nota(id = it.id, titulo = it.titulo,contenido = it.contenido)}
+    }
 }

@@ -10,5 +10,6 @@ interface NoteRepository {
     suspend fun updateNote(nota: Nota)
     suspend fun deleteNote(nota: Nota)
     suspend fun deleteAllNotes()
+    suspend fun getAllNotes():List<Nota>
 
 }
