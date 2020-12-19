@@ -1,13 +1,20 @@
 package ar.edu.unlam.notesapp.data
 
+import ar.edu.unlam.notesapp.model.Note
+import ar.edu.unlam.notesapp.model.NoteRepository
+import ar.edu.unlam.notesapp.model.NoteRepository2
+import ar.edu.unlam.notesapp.ui.CreateNoteViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.lang.RuntimeException
 
@@ -15,6 +22,10 @@ import java.lang.RuntimeException
 class NotaRepositoryTest {
 
     lateinit var instance:NotaRepository
+    lateinit var instance2: CreateNoteViewModel
+
+    @MockK
+    lateinit var noteRepository: NoteRepository2
 
     @MockK
     lateinit var noteDao:NotaDao
@@ -22,11 +33,15 @@ class NotaRepositoryTest {
     @Before
     fun setUp()=MockKAnnotations.init(this,relaxUnitFun = true)
 
+    @get:Rule
+    val coroutineTestRule = CoroutineTestRule()
+
+
     @Test
     @ExperimentalCoroutinesApi
     fun `testQueVerificaCantidadDeNotasAgregadas`(){
 
-        runBlockingTest {
+        coroutineTestRule.testDispatcher.runBlockingTest {
             instance= NotaRepository(noteDao)
 
             coEvery { noteDao.getAllNotas() } returns listOf(
@@ -46,7 +61,7 @@ class NotaRepositoryTest {
     @ExperimentalCoroutinesApi
     fun `testQueVerificaElContenidoDeUnaPosicion`(){
 
-        runBlockingTest {
+        coroutineTestRule.testDispatcher.runBlockingTest {
             instance= NotaRepository(noteDao)
 
             coEvery { noteDao.getAllNotas() } returns listOf(
@@ -79,6 +94,28 @@ class NotaRepositoryTest {
         }.isInstanceOf(RuntimeException::class.java)
                 .hasMessage(("exception"))
     }
+
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun `se crea la nota correctamente`() {
+        coroutineTestRule.testDispatcher.runBlockingTest {
+            instance2 = CreateNoteViewModel(noteRepository)
+
+            coJustRun { noteRepository.save(any()) }
+
+            instance2.status.observeForever {
+                assertThat(it).isEqualTo(CreateNoteViewModel.Status.SUCCESS)
+            }
+
+            val note = Note(1,"test", "test")
+            instance2.save(note)
+
+            coVerify { noteRepository.save(note) }
+        }
+    }
+
+
 
 
 
